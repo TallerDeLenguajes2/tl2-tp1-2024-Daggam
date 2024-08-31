@@ -3,7 +3,7 @@ using PedidoNamespace;
 
 
 Cadeteria cadeteria;
-List<Pedidos> PedidosNoAsignados = new List<Pedidos>();
+List<Pedido> pedidosNoAsignados = new List<Pedido>();
 
 void crearPedido()
 {
@@ -17,7 +17,7 @@ void crearPedido()
     string referencia = Console.ReadLine();
     Console.WriteLine("Alguna observación sobre el pedido:");
     string obs = Console.ReadLine();
-    
+    pedidosNoAsignados.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
 }
 
 bool cargarArchivosCSV(){
@@ -64,7 +64,7 @@ if(cargarArchivosCSV()){
         switch (opcion)
         {
             case 1:
-                
+                crearPedido();
                 break;
         }
         if (opcion == 5) break;

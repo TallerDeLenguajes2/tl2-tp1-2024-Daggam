@@ -5,7 +5,7 @@ enum EstadoPedido
 {
     NoAsignado, Enviando, Entregado
 }
-class Pedidos
+class Pedido
 {
     static int id = 0;
     int numero_pedido = -1;
@@ -14,7 +14,7 @@ class Pedidos
 
     EstadoPedido estado;
 
-    public Pedidos(string nombre, string direccion, string telefono, string datos_referencia, string observacion)
+    public Pedido(string nombre, string direccion, string telefono, string datos_referencia, string observacion)
     {
         id++;
         numero_pedido = id;

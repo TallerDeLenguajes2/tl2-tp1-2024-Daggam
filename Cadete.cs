@@ -7,7 +7,7 @@ class Cadete
     string nombre;
     string direccion;
     string telefono;
-    List<Pedidos> listadoPedidos;
+    List<Pedido> listadoPedidos;
 
     public Cadete(int id, string nombre, string direccion, string telefono)
     {
@@ -15,7 +15,7 @@ class Cadete
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-        listadoPedidos = new List<Pedidos>();
+        listadoPedidos = new List<Pedido>();
     }
 
     float jornalACobrar()
