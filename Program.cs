@@ -1,12 +1,20 @@
 ﻿using CadeteriaNamespace;
 using PedidoNamespace;
 
-void comprobarEntradaEntera(ref int a)
+
+
+void crearPedido()
 {
-    while (!(int.TryParse(Console.ReadLine(), out a)))
-    {
-        Console.WriteLine("La entrada ingresada no es válida.");
-    }
+    Console.WriteLine("--- Datos Cliente ---\nIngresa el nombre: ");
+    string nombre = Console.ReadLine();
+    Console.WriteLine("Ingresa la direccion: ");
+    string direccion = Console.ReadLine();
+    Console.WriteLine("Ingrese la telefono: ");
+    string telefono = Console.ReadLine();
+    Console.WriteLine("Ingrese la referencia: ");
+    string referencia = Console.ReadLine();
+
+
 }
 
 while (true)
@@ -24,6 +32,11 @@ while (true)
     {
         Console.WriteLine("La entrada ingresada no es válida.");
     }
-
+    switch (opcion)
+    {
+        case 1:
+            
+            break;
+    }
     if (opcion == 5) break;
 }
