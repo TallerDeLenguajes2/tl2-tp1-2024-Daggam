@@ -1,8 +1,6 @@
 ﻿using CadeteriaNamespace;
 using PedidoNamespace;
 
-
-
 void crearPedido()
 {
     Console.WriteLine("--- Datos Cliente ---\nIngresa el nombre: ");
@@ -13,8 +11,9 @@ void crearPedido()
     string telefono = Console.ReadLine();
     Console.WriteLine("Ingrese la referencia: ");
     string referencia = Console.ReadLine();
-
-
+    Console.WriteLine("Alguna observación sobre el pedido:");
+    string obs = Console.ReadLine();
+    
 }
 
 while (true)
