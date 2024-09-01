@@ -104,11 +104,16 @@ void cambiarPedido(){
     while(!(int.TryParse(Console.ReadLine(),out id1))){
         Console.WriteLine("El valor ingresado no es válido.");
     }
-    var pedidosCadete = cadeteria.mostrarPedido(id1);
-    if(pedidosCadete.Count != 0){
-        foreach (string s in pedidosCadete) Console.WriteLine(s);
-        Console.WriteLine("Ingrese el numero del pedido que desea transferir: ");
+    //Obtengo los pedidos no asignados del cadete.
+    var obtenerPedidos = from cadete  in cadeteria.ListadoCadetes
+                         where cadete.Id == id1 
+                         from pedido in cadete.ListadoPedidos
+                         where pedido.Estado == EstadoPedido.Enviando 
+                         select pedido;
+    if(obtenerPedidos.Count() != 0){
+        foreach( var pedido in obtenerPedidos) Console.WriteLine($"Numero pedido: {pedido.Numero_pedido} | {pedido.VerDatosCliente()}");
         int num_pedido;
+        Console.WriteLine("Ingrese el numero del pedido que desea transferir: ");
         while(!(int.TryParse(Console.ReadLine(),out num_pedido))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
@@ -117,13 +122,14 @@ void cambiarPedido(){
         while(!(int.TryParse(Console.ReadLine(),out id2))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        if(cadeteria.TransferirPedido(id1,id2,num_pedido)){
+        Pedido pedidoTransferir = obtenerPedidos.FirstOrDefault(p=>p.Numero_pedido==num_pedido);
+        if(cadeteria.TransferirPedido(id1,id2,pedidoTransferir)){
             Console.WriteLine("El pedido fue transferido con éxito.");
         }else{
             Console.WriteLine("El pedido no existe o el cadete a asignar el pedido no existe.");
         }
     }else{
-        Console.WriteLine("El cadete no tiene asignado ningún pedido.");
+        Console.WriteLine("El cadete no tiene asignado ningún pedido");
     }
     Thread.Sleep(1000);
 }

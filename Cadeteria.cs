@@ -55,16 +55,12 @@ class Cadeteria
     //         Pedido p = c.ListadoPedidos.Find(p=>p.Numero_pedido==num_pedido);
     //     }
     // }
-    public bool TransferirPedido(int emisorId,int receptorId,int numeroPedido){
+    public bool TransferirPedido(int emisorId,int receptorId, Pedido pedido){
         Cadete emisor = listadoCadetes.Find(c=>c.Id==emisorId);
         Cadete receptor = listadoCadetes.Find(c=>c.Id==receptorId);
-        if(emisor!=null && receptor!=null){
-            Pedido pedido = emisor.ListadoPedidos.Find(p=>p.Numero_pedido==numeroPedido);
-            if(pedido!=null){
-                emisor.ListadoPedidos.Remove(pedido);
-                receptor.ListadoPedidos.Add(pedido);
-                return true;
-            }
+        if(emisor!=null && receptor!=null && pedido != null && emisor.ListadoPedidos.Remove(pedido)){
+            receptor.ListadoPedidos.Add(pedido);
+            return true;
         }
         return false;
     }
