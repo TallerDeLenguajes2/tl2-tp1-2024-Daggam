@@ -61,7 +61,39 @@ void asignarPedidos(){
 }
 
 void cambiarEstadoPedido(){
-
+    var obtenerPedidos = from cadete in cadeteria.ListadoCadetes
+                         from pedido in cadete.ListadoPedidos
+                         select pedido;
+    if(obtenerPedidos.Count() != 0){
+        Console.WriteLine("-- Pedidos Asignados --");
+        foreach(var p in obtenerPedidos){
+            Console.WriteLine($"Numero pedido: {p.Numero_pedido} | Estado: {p.Estado}"); 
+        }
+        Console.WriteLine("Ingrese el numero del pedido al cuál desea cambiar de estado");
+        int num_ped;
+        while(!(int.TryParse(Console.ReadLine(),out num_ped))){
+            Console.WriteLine("El valor ingresado no es válido.");
+        }
+        Pedido pedidoSeleccionado = obtenerPedidos.FirstOrDefault(pedido=>pedido.Numero_pedido==num_ped);
+        if(pedidoSeleccionado!=null){
+            Console.WriteLine("Ingrese el estado al cual desea cambiar:");
+            foreach(var estado in Enum.GetValues(typeof(EstadoPedido))){
+                    if(estado.Equals(EstadoPedido.NoAsignado)) continue;
+                    Console.WriteLine($"- {estado}");
+            }
+            EstadoPedido nuevoEstado;
+            while(!Enum.TryParse(Console.ReadLine(),true,out nuevoEstado) || nuevoEstado==EstadoPedido.NoAsignado){
+                Console.WriteLine("El valor ingresado no es válido.");
+            }
+            pedidoSeleccionado.Estado=nuevoEstado;
+            Console.WriteLine("El cambio de estado se realizo exitosamente.");
+        }else{
+            Console.WriteLine("No existe un pedido con tal numero.");
+        }
+    }else{
+        Console.WriteLine("No hay pedidos asignados.");
+    }
+    Thread.Sleep(1000);
 }
 
 void cambiarPedido(){
