@@ -59,6 +59,11 @@ void asignarPedidos(){
     
     Thread.Sleep(1500);
 }
+
+void cambiarEstadoPedido(){
+
+}
+
 void cambiarPedido(){
     var cadetesInfo = cadeteria.mostrarCadetes();
     foreach (string c in cadetesInfo) Console.WriteLine(c);
@@ -90,6 +95,7 @@ void cambiarPedido(){
     }
     Thread.Sleep(1000);
 }
+
 bool cargarArchivosCSV(){
     string path = "cadeteria.csv";
     string path2 = "cadetes.csv";
@@ -141,6 +147,9 @@ if(cargarArchivosCSV()){
                 asignarPedidos();
                 break;
             case 3:
+                cambiarEstadoPedido();
+                break;
+            case 4:
                 cambiarPedido();
                 break;
             
