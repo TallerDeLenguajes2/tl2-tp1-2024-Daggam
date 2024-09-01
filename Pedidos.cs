@@ -26,12 +26,15 @@ class Pedido
             Telefono = telefono,
             Datos_referencia_direccion = datos_referencia
         };
-        estado = EstadoPedido.Entregado;
+        estado = EstadoPedido.NoAsignado;
     }
 
-    public void VerDatosCliente()
+    public int Numero_pedido { get => numero_pedido; set => numero_pedido = value; }
+    internal EstadoPedido Estado { get => estado; set => estado = value; }
+
+    public string VerDatosCliente()
     {
-        Console.WriteLine($"Nombre: {cliente.Nombre} | Direccion: {cliente.Direccion} | Telefono: {cliente.Telefono} | Referencia: {cliente.Datos_referencia_direccion}");
+        return $"Nombre: {cliente.Nombre} | Direccion: {cliente.Direccion} | Telefono: {cliente.Telefono} | Referencia: {cliente.Datos_referencia_direccion}"; 
     }
 
     public void VerDireccionCliente()

@@ -2,7 +2,7 @@
 using PedidoNamespace;
 
 
-Cadeteria cadeteria;
+Cadeteria cadeteria = null;
 List<Pedido> pedidosNoAsignados = new List<Pedido>();
 
 void crearPedido()
@@ -20,6 +20,48 @@ void crearPedido()
     pedidosNoAsignados.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
 }
 
+void asignarPedidos(){
+    if(pedidosNoAsignados.Count!=0){
+        Console.WriteLine("-- PEDIDOS NO ASIGNADOS --");
+        foreach(Pedido p in pedidosNoAsignados){
+            Console.WriteLine($"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()} ");
+        }
+        Console.WriteLine("Ingrese el numero de pedido a asignar:");
+        int numped=-1;
+        while(!(int.TryParse(Console.ReadLine(),out numped))){
+            Console.WriteLine("El valor ingresado no es válido.");
+        }
+        Pedido pedObtenido = pedidosNoAsignados.Find(p=>p.Numero_pedido==numped);
+        if(pedObtenido!=null){
+            //Podría crear un metodo en cadeteria que se llame: mostrarCadetes(). 
+            var consultaNombre = cadeteria.mostrarCadetes();
+            foreach(string info in consultaNombre){
+                    Console.WriteLine(info);
+            }   
+            Console.WriteLine("Ingrese el id del cadete al cual desea asignar este pedido:");
+            int id=-1;
+            while(!(int.TryParse(Console.ReadLine(),out id))){
+                Console.WriteLine("El valor ingresado no es válido.");
+            }
+            if(cadeteria.AsignarPedido(id,pedObtenido)){
+                Console.WriteLine("Pedido asignado con éxito.");
+                pedidosNoAsignados.Remove(pedObtenido);
+            }else{
+                Console.WriteLine("El cadete no existe.");
+            }
+        }else{
+            Console.WriteLine("El pedido no existe.");
+        }
+    }else{
+        Console.WriteLine("No hay pedidos para asignar");
+    }
+    
+    Thread.Sleep(1500);
+}
+void cambiarPedido(){
+
+    Console.WriteLine("Ingrese el ID del cadete que desea transferir un pedido:");
+}
 bool cargarArchivosCSV(){
     string path = "cadeteria.csv";
     string path2 = "cadetes.csv";
@@ -36,7 +78,7 @@ bool cargarArchivosCSV(){
                              let campos = linea.Split(',')
                              select campos;
         foreach(var c in obtenerCadetes){
-            cadeteria.contratarCadete(int.Parse(c[0]),c[1],c[2],c[3]);
+            cadeteria.ContratarCadete(int.Parse(c[0]),c[1],c[2],c[3]);
         }
         return true;
     }else{
@@ -61,11 +103,16 @@ if(cargarArchivosCSV()){
         {
             Console.WriteLine("La entrada ingresada no es válida.");
         }
+        Console.Clear();
         switch (opcion)
         {
             case 1:
                 crearPedido();
                 break;
+            case 2:
+                asignarPedidos();
+                break;
+            
         }
         if (opcion == 5) break;
     }

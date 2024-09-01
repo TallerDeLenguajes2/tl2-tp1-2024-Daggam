@@ -18,6 +18,12 @@ class Cadete
         listadoPedidos = new List<Pedido>();
     }
 
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Direccion { get => direccion; set => direccion = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+    public int Id { get => id; set => id = value; }
+    internal List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+
     float jornalACobrar()
     {
         return 500f;
