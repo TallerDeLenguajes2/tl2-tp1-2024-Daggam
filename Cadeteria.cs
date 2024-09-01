@@ -36,4 +36,36 @@ class Cadeteria
                                  select $"ID: {c.Id} | Nombre: {c.Nombre} | Direccion: {c.Direccion} | Telefono: {c.Telefono}";
         return consultaNombre.ToArray();
     }
+    public bool ExisteCadete(int id){
+        return listadoCadetes.Exists(c=>c.Id ==id);
+    }
+    //En lugar de retornar un string de pedidos, podemos retornar los pedidos.
+    public List<string> mostrarPedido(int id){
+        Cadete c = listadoCadetes.Find(p=>p.Id==id);
+        if(c!=null){
+            var obtenerPedidos = from pedidos in c.ListadoPedidos
+                                select $"Numero de pedido: {pedidos.Numero_pedido} | " + pedidos.VerDatosCliente();
+            return obtenerPedidos.ToList();
+        }
+        return new List<string>();
+    }
+    // public Pedido? obtenerPedido(int id,int num_pedido){
+    //     Cadete c = listadoCadetes.Find(c=>c.Id==id);
+    //     if(c!=null){
+    //         Pedido p = c.ListadoPedidos.Find(p=>p.Numero_pedido==num_pedido);
+    //     }
+    // }
+    public bool TransferirPedido(int emisorId,int receptorId,int numeroPedido){
+        Cadete emisor = listadoCadetes.Find(c=>c.Id==emisorId);
+        Cadete receptor = listadoCadetes.Find(c=>c.Id==receptorId);
+        if(emisor!=null && receptor!=null){
+            Pedido pedido = emisor.ListadoPedidos.Find(p=>p.Numero_pedido==numeroPedido);
+            if(pedido!=null){
+                emisor.ListadoPedidos.Remove(pedido);
+                receptor.ListadoPedidos.Add(pedido);
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using CadeteriaNamespace;
+﻿using System.Data;
+using CadeteriaNamespace;
 using PedidoNamespace;
 
 
@@ -59,8 +60,35 @@ void asignarPedidos(){
     Thread.Sleep(1500);
 }
 void cambiarPedido(){
-
+    var cadetesInfo = cadeteria.mostrarCadetes();
+    foreach (string c in cadetesInfo) Console.WriteLine(c);
     Console.WriteLine("Ingrese el ID del cadete que desea transferir un pedido:");
+    int id1;
+    while(!(int.TryParse(Console.ReadLine(),out id1))){
+        Console.WriteLine("El valor ingresado no es válido.");
+    }
+    var pedidosCadete = cadeteria.mostrarPedido(id1);
+    if(pedidosCadete.Count != 0){
+        foreach (string s in pedidosCadete) Console.WriteLine(s);
+        Console.WriteLine("Ingrese el numero del pedido que desea transferir: ");
+        int num_pedido;
+        while(!(int.TryParse(Console.ReadLine(),out num_pedido))){
+            Console.WriteLine("El valor ingresado no es válido.");
+        }
+        Console.WriteLine("Ingrese el ID del cadete a asignar el pedido");
+        int id2;
+        while(!(int.TryParse(Console.ReadLine(),out id2))){
+            Console.WriteLine("El valor ingresado no es válido.");
+        }
+        if(cadeteria.TransferirPedido(id1,id2,num_pedido)){
+            Console.WriteLine("El pedido fue transferido con éxito.");
+        }else{
+            Console.WriteLine("El pedido no existe o el cadete a asignar el pedido no existe.");
+        }
+    }else{
+        Console.WriteLine("El cadete no tiene asignado ningún pedido.");
+    }
+    Thread.Sleep(1000);
 }
 bool cargarArchivosCSV(){
     string path = "cadeteria.csv";
@@ -111,6 +139,9 @@ if(cargarArchivosCSV()){
                 break;
             case 2:
                 asignarPedidos();
+                break;
+            case 3:
+                cambiarPedido();
                 break;
             
         }
