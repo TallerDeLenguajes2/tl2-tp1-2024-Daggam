@@ -194,4 +194,19 @@ if(cargarArchivosCSV()){
         }
         if (opcion == 5) break;
     }
+
+    Console.WriteLine("--- INFORME PEDIDOS ---");
+    var cadeteInfo = from cadete in cadeteria.ListadoCadetes
+                     let pedidosEntregados = cadete.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado)
+                     select new {montoGanado = cadete.JornalACobrar()*pedidosEntregados,
+                     cantidadEnvios = pedidosEntregados,
+                     cantidadPedidos = cadete.ListadoPedidos.Count(),
+                     nombre = cadete.Nombre};
+    float plataGanada=0f;
+    foreach(var cadete in cadeteInfo){
+        float enviosPromedios = (cadete.cantidadPedidos!=0) ? ((float) cadete.cantidadEnvios/cadete.cantidadPedidos) : 0;
+        Console.WriteLine($"Nombre: {cadete.nombre} | Monto ganado: {cadete.montoGanado} | Envios realizados: {cadete.cantidadEnvios} | Envios promedios: {enviosPromedios}");
+        plataGanada+=cadete.montoGanado;
+    }
+    Console.WriteLine($"Monto total ganado: {plataGanada}");
 }

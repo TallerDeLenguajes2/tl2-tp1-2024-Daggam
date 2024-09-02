@@ -24,7 +24,7 @@ class Cadete
     public int Id { get => id; set => id = value; }
     internal List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
 
-    float jornalACobrar()
+    public float JornalACobrar()
     {
         return 500f;
     }
