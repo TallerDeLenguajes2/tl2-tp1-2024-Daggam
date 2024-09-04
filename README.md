@@ -18,7 +18,7 @@ Cadetería podría tener los siguientes metodos:
 - MostrarCadetes: Muestra todos los cadetes.
 - MostrarPedido: Muestra todos los pedidos dado un id de cadete.
 - TransferirPedido: dado dos id de cadetes y un pedido, transfiere un pedido de un cadete a otro.
-- 
+  
 Los cadetes podría tener métodos que ayuden a cadetería, tal como:
 - verPedidos: Muestra el contenido de ListadoPedidos
 - agregarPedido: Agrega un pedido a ListadoPedidos
