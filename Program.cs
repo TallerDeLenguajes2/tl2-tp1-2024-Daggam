@@ -44,7 +44,7 @@ void asignarPedidos(){
             while(!(int.TryParse(Console.ReadLine(),out id))){
                 Console.WriteLine("El valor ingresado no es válido.");
             }
-            if(cadeteria.AsignarPedido(id,pedObtenido)){
+            if(cadeteria.AsignarCadeteAPedido(id,pedObtenido)){
                 Console.WriteLine("Pedido asignado con éxito.");
                 pedidosNoAsignados.Remove(pedObtenido);
             }else{

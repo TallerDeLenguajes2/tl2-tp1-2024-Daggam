@@ -32,6 +32,7 @@ class Pedido
 
     public int Numero_pedido { get => numero_pedido; set => numero_pedido = value; }
     internal EstadoPedido Estado { get => estado; set => estado = value; }
+    internal Cadete Cadete { get => cadete; set => cadete = value; }
 
     public string VerDatosCliente()
     {

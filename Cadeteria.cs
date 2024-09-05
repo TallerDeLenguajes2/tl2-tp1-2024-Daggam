@@ -7,12 +7,13 @@ class Cadeteria
     string nombre;
     string telefono;
     List<Cadete> listadoCadetes;
-
+    List<Pedido> listadoPedidos;
     public Cadeteria(string nombre, string telefono)
     {
         this.nombre = nombre;
         this.telefono = telefono;
         listadoCadetes = new List<Cadete>();
+        listadoPedidos = new List<Pedido>();
     }
 
     internal List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
@@ -21,12 +22,11 @@ class Cadeteria
     {
         listadoCadetes.Add(new Cadete(id, nombre, direccion, telefono));
     }
-    public bool AsignarPedido(int id, Pedido pedido){
+    public bool AsignarCadeteAPedido(int id, int num_ped){
+        Pedido p = listadoPedidos.Find(ped=>ped.Numero_pedido==num_ped);
         Cadete c = listadoCadetes.Find(c=>c.Id == id);
-        if(c!=null){
-            pedido.Estado = EstadoPedido.Enviando;
-            c.ListadoPedidos.Add(pedido);
-            
+        if(p!=null && c!=null){
+            p.Cadete = c;
             return true;
         }
         return false;
@@ -49,12 +49,7 @@ class Cadeteria
         }
         return new List<string>();
     }
-    // public Pedido? obtenerPedido(int id,int num_pedido){
-    //     Cadete c = listadoCadetes.Find(c=>c.Id==id);
-    //     if(c!=null){
-    //         Pedido p = c.ListadoPedidos.Find(p=>p.Numero_pedido==num_pedido);
-    //     }
-    // }
+
     public bool TransferirPedido(int emisorId,int receptorId, Pedido pedido){
         Cadete emisor = listadoCadetes.Find(c=>c.Id==emisorId);
         Cadete receptor = listadoCadetes.Find(c=>c.Id==receptorId);
@@ -63,5 +58,13 @@ class Cadeteria
             return true;
         }
         return false;
+    }
+
+    public float JornalACobrar(int id){
+        Cadete cadeteElegido = listadoCadetes.Find(c=>c.Id==id);
+        if(cadeteElegido!=null){
+            return cadeteElegido.JornalACobrar();
+        }
+        return 0f;
     }
 }
