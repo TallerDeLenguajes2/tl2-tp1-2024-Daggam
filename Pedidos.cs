@@ -14,7 +14,7 @@ class Pedido
     string observacion;
     Cliente cliente;
     EstadoPedido estado;
-
+    Cadete cadete;
     public Pedido(string nombre, string direccion, string telefono, string datos_referencia, string observacion)
     {
         id++;
