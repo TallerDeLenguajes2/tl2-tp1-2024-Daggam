@@ -4,7 +4,6 @@ using PedidoNamespace;
 
 
 Cadeteria cadeteria = null;
-// List<Pedido> pedidosNoAsignados = new List<Pedido>();
 
 void crearPedido()
 {
@@ -18,7 +17,6 @@ void crearPedido()
     string referencia = Console.ReadLine();
     Console.WriteLine("Alguna observación sobre el pedido:");
     string obs = Console.ReadLine();
-    // pedidosNoAsignados.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
     cadeteria.ListadoPedidos.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
 }
 
@@ -192,24 +190,11 @@ if(cargarArchivosCSV()){
     }
 
     Console.WriteLine("--- INFORME PEDIDOS ---");
-    // var cadeteInfo = from cadete in cadeteria.ListadoCadetes
-    //                  let pedidosEntregados = cadeteria.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado)
-    //                  select new {montoGanado = cadete.JornalACobrar()*pedidosEntregados,
-    //                  cantidadEnvios = pedidosEntregados,
-    //                  cantidadPedidos = cadeteria.ListadoPedidos.Count(),
-    //                  nombre = cadete.Nombre};                            
-    // foreach(var cadete in cadeteInfo){
-    //     float enviosPromedios = (cadete.cantidadPedidos!=0) ? ((float) cadete.cantidadEnvios/cadete.cantidadPedidos) : 0;
-    //     Console.WriteLine($"Nombre: {cadete.nombre} | Monto ganado: {cadete.montoGanado} | Envios realizados: {cadete.cantidadEnvios} | Envios promedios: {enviosPromedios}");
-    //     plataGanada+=cadete.montoGanado;
-    // }
-
     var obtenerID = from cadete in cadeteria.ListadoCadetes
                     select new {id=cadete.Id,nombre=cadete.Nombre};
     float plataGanada=0f;
     foreach (var c in obtenerID)
     {
-        // if(cadeteria.ListadoCadetes.Exists(p=>p.Cadete!=null));
         var cantidadPedidos = cadeteria.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado && p.Cadete.Id==c.id);
         float enviosPromedios = (cantidadPedidos !=0) ? ((float) cantidadPedidos/cadeteria.ListadoPedidos.Count(p=>p.Estado!=EstadoPedido.NoAsignado && p.Cadete.Id==c.id)):0;
         float montoGanado = cadeteria.JornalACobrar(c.id);
