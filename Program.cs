@@ -4,7 +4,7 @@ using PedidoNamespace;
 
 
 Cadeteria cadeteria = null;
-List<Pedido> pedidosNoAsignados = new List<Pedido>();
+// List<Pedido> pedidosNoAsignados = new List<Pedido>();
 
 void crearPedido()
 {
@@ -18,11 +18,15 @@ void crearPedido()
     string referencia = Console.ReadLine();
     Console.WriteLine("Alguna observación sobre el pedido:");
     string obs = Console.ReadLine();
-    pedidosNoAsignados.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
+    // pedidosNoAsignados.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
+    cadeteria.ListadoPedidos.Add(new Pedido(nombre,direccion,telefono,referencia,obs));
 }
 
 void asignarPedidos(){
-    if(pedidosNoAsignados.Count!=0){
+    var pedidosNoAsignados = (from pedidos in cadeteria.ListadoPedidos
+                             where pedidos.Estado == EstadoPedido.NoAsignado
+                             select pedidos).ToList();
+    if(pedidosNoAsignados.Count != 0){
         Console.WriteLine("-- PEDIDOS NO ASIGNADOS --");
         foreach(Pedido p in pedidosNoAsignados){
             Console.WriteLine($"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()} ");
@@ -32,10 +36,8 @@ void asignarPedidos(){
         while(!(int.TryParse(Console.ReadLine(),out numped))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        Pedido pedObtenido = pedidosNoAsignados.Find(p=>p.Numero_pedido==numped);
-        if(pedObtenido!=null){
-            //Podría crear un metodo en cadeteria que se llame: mostrarCadetes(). 
-            var consultaNombre = cadeteria.mostrarCadetes();
+        if(pedidosNoAsignados.Exists(p=>p.Numero_pedido==numped)){
+            var consultaNombre = cadeteria.MostrarCadetes();
             foreach(string info in consultaNombre){
                     Console.WriteLine(info);
             }   
@@ -44,9 +46,8 @@ void asignarPedidos(){
             while(!(int.TryParse(Console.ReadLine(),out id))){
                 Console.WriteLine("El valor ingresado no es válido.");
             }
-            if(cadeteria.AsignarCadeteAPedido(id,pedObtenido)){
+            if(cadeteria.AsignarCadeteAPedido(id,numped)){
                 Console.WriteLine("Pedido asignado con éxito.");
-                pedidosNoAsignados.Remove(pedObtenido);
             }else{
                 Console.WriteLine("El cadete no existe.");
             }
@@ -61,12 +62,9 @@ void asignarPedidos(){
 }
 
 void cambiarEstadoPedido(){
-    var obtenerPedidos = from cadete in cadeteria.ListadoCadetes
-                         from pedido in cadete.ListadoPedidos
-                         select pedido;
-    if(obtenerPedidos.Count() != 0){
+    if(cadeteria.ListadoPedidos.Count != 0){
         Console.WriteLine("-- Pedidos Asignados --");
-        foreach(var p in obtenerPedidos){
+        foreach(var p in cadeteria.ListadoPedidos){
             Console.WriteLine($"Numero pedido: {p.Numero_pedido} | Estado: {p.Estado}"); 
         }
         Console.WriteLine("Ingrese el numero del pedido al cuál desea cambiar de estado");
@@ -74,7 +72,7 @@ void cambiarEstadoPedido(){
         while(!(int.TryParse(Console.ReadLine(),out num_ped))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        Pedido pedidoSeleccionado = obtenerPedidos.FirstOrDefault(pedido=>pedido.Numero_pedido==num_ped);
+        Pedido pedidoSeleccionado = cadeteria.ListadoPedidos.Find(p=>p.Numero_pedido==num_ped);
         if(pedidoSeleccionado!=null){
             Console.WriteLine("Ingrese el estado al cual desea cambiar:");
             foreach(var estado in Enum.GetValues(typeof(EstadoPedido))){
@@ -97,18 +95,17 @@ void cambiarEstadoPedido(){
 }
 
 void cambiarPedido(){
-    var cadetesInfo = cadeteria.mostrarCadetes();
+    var cadetesInfo = cadeteria.MostrarCadetes();
     foreach (string c in cadetesInfo) Console.WriteLine(c);
     Console.WriteLine("Ingrese el ID del cadete que desea transferir un pedido:");
     int id1;
     while(!(int.TryParse(Console.ReadLine(),out id1))){
         Console.WriteLine("El valor ingresado no es válido.");
     }
-    //Obtengo los pedidos no asignados del cadete.
-    var obtenerPedidos = from cadete  in cadeteria.ListadoCadetes
-                         where cadete.Id == id1 
-                         from pedido in cadete.ListadoPedidos
-                         where pedido.Estado == EstadoPedido.Enviando 
+    
+    //Obtengo los pedidos no entregados del cadete
+    var obtenerPedidos = from pedido in cadeteria.ListadoPedidos
+                         where pedido.Estado == EstadoPedido.Enviando && pedido.Cadete.Id ==id1
                          select pedido;
     if(obtenerPedidos.Count() != 0){
         foreach( var pedido in obtenerPedidos) Console.WriteLine($"Numero pedido: {pedido.Numero_pedido} | {pedido.VerDatosCliente()}");
@@ -117,19 +114,18 @@ void cambiarPedido(){
         while(!(int.TryParse(Console.ReadLine(),out num_pedido))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        Console.WriteLine("Ingrese el ID del cadete a asignar el pedido");
+        Console.WriteLine("Ingrese el ID del cadete a asignar el pedido: ");
         int id2;
         while(!(int.TryParse(Console.ReadLine(),out id2))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        Pedido pedidoTransferir = obtenerPedidos.FirstOrDefault(p=>p.Numero_pedido==num_pedido);
-        if(cadeteria.TransferirPedido(id1,id2,pedidoTransferir)){
+        if(cadeteria.AsignarCadeteAPedido(id2,num_pedido)){
             Console.WriteLine("El pedido fue transferido con éxito.");
         }else{
             Console.WriteLine("El pedido no existe o el cadete a asignar el pedido no existe.");
         }
     }else{
-        Console.WriteLine("El cadete no tiene asignado ningún pedido");
+        Console.WriteLine("El cadete no existe o no tiene asignado ningún pedido");
     }
     Thread.Sleep(1000);
 }
@@ -196,17 +192,29 @@ if(cargarArchivosCSV()){
     }
 
     Console.WriteLine("--- INFORME PEDIDOS ---");
-    var cadeteInfo = from cadete in cadeteria.ListadoCadetes
-                     let pedidosEntregados = cadete.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado)
-                     select new {montoGanado = cadete.JornalACobrar()*pedidosEntregados,
-                     cantidadEnvios = pedidosEntregados,
-                     cantidadPedidos = cadete.ListadoPedidos.Count(),
-                     nombre = cadete.Nombre};
+    // var cadeteInfo = from cadete in cadeteria.ListadoCadetes
+    //                  let pedidosEntregados = cadeteria.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado)
+    //                  select new {montoGanado = cadete.JornalACobrar()*pedidosEntregados,
+    //                  cantidadEnvios = pedidosEntregados,
+    //                  cantidadPedidos = cadeteria.ListadoPedidos.Count(),
+    //                  nombre = cadete.Nombre};                            
+    // foreach(var cadete in cadeteInfo){
+    //     float enviosPromedios = (cadete.cantidadPedidos!=0) ? ((float) cadete.cantidadEnvios/cadete.cantidadPedidos) : 0;
+    //     Console.WriteLine($"Nombre: {cadete.nombre} | Monto ganado: {cadete.montoGanado} | Envios realizados: {cadete.cantidadEnvios} | Envios promedios: {enviosPromedios}");
+    //     plataGanada+=cadete.montoGanado;
+    // }
+
+    var obtenerID = from cadete in cadeteria.ListadoCadetes
+                    select new {id=cadete.Id,nombre=cadete.Nombre};
     float plataGanada=0f;
-    foreach(var cadete in cadeteInfo){
-        float enviosPromedios = (cadete.cantidadPedidos!=0) ? ((float) cadete.cantidadEnvios/cadete.cantidadPedidos) : 0;
-        Console.WriteLine($"Nombre: {cadete.nombre} | Monto ganado: {cadete.montoGanado} | Envios realizados: {cadete.cantidadEnvios} | Envios promedios: {enviosPromedios}");
-        plataGanada+=cadete.montoGanado;
+    foreach (var c in obtenerID)
+    {
+        // if(cadeteria.ListadoCadetes.Exists(p=>p.Cadete!=null));
+        var cantidadPedidos = cadeteria.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado && p.Cadete.Id==c.id);
+        float enviosPromedios = (cantidadPedidos !=0) ? ((float) cantidadPedidos/cadeteria.ListadoPedidos.Count(p=>p.Estado!=EstadoPedido.NoAsignado && p.Cadete.Id==c.id)):0;
+        float montoGanado = cadeteria.JornalACobrar(c.id);
+        Console.WriteLine($"Nombre: {c.nombre} | Monto ganado: {montoGanado} | Envios realizados: {cantidadPedidos} | Envios promedios: {enviosPromedios}");
+        plataGanada+=montoGanado;
     }
     Console.WriteLine($"Monto total ganado: {plataGanada}");
 }
