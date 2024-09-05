@@ -1,4 +1,6 @@
 namespace PedidoNamespace;
+
+using CadeteNamespace;
 using ClienteNamespace;
 
 enum EstadoPedido
@@ -11,7 +13,6 @@ class Pedido
     int numero_pedido = -1;
     string observacion;
     Cliente cliente;
-
     EstadoPedido estado;
 
     public Pedido(string nombre, string direccion, string telefono, string datos_referencia, string observacion)
