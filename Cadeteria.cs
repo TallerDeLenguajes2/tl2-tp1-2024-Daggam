@@ -29,26 +29,30 @@ public class Cadeteria
     {
         listadoCadetes.Add(new Cadete(id, nombre, direccion, telefono));
     }
-    public bool AsignarCadeteAPedido(int id, int num_ped){
-        Pedido p = listadoPedidos.Find(ped=>ped.Numero_pedido==num_ped);
-        Cadete c = listadoCadetes.Find(c=>c.Id == id);
-        if(p!=null && c!=null){
+    public bool AsignarCadeteAPedido(int id, int num_ped)
+    {
+        Pedido p = listadoPedidos.FirstOrDefault(ped => ped.Numero_pedido == num_ped);
+        Cadete c = listadoCadetes.FirstOrDefault(c => c.Id == id);
+        if (p != null && c != null)
+        {
             p.Cadete = c;
             p.Estado = EstadoPedido.Enviando;
             return true;
         }
         return false;
     }
-    public string[] MostrarCadetes(){
+    public string[] MostrarCadetes()
+    {
         var consultaNombre = from c in ListadoCadetes
-                                 select $"ID: {c.Id} | Nombre: {c.Nombre} | Direccion: {c.Direccion} | Telefono: {c.Telefono}";
+                             select $"ID: {c.Id} | Nombre: {c.Nombre} | Direccion: {c.Direccion} | Telefono: {c.Telefono}";
         return consultaNombre.ToArray();
     }
-    public float JornalACobrar(int id){
-        Cadete cadeteElegido = listadoCadetes.Find(c=>c.Id==id);
-        if(cadeteElegido!=null){
-            
-            return cadeteElegido.JornalACobrar()*listadoPedidos.Count(p=>p.Cadete==cadeteElegido && p.Estado==EstadoPedido.Entregado);
+    public float JornalACobrar(int id)
+    {
+        Cadete cadeteElegido = listadoCadetes.FirstOrDefault(c => c.Id == id);
+        if (cadeteElegido != null)
+        {
+            return cadeteElegido.JornalACobrar() * listadoPedidos.Count(p => p.Cadete == cadeteElegido && p.Estado == EstadoPedido.Entregado);
         }
         return 0f;
     }
