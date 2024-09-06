@@ -128,31 +128,6 @@ void cambiarPedido(){
     Thread.Sleep(1000);
 }
 
-// bool cargarArchivosCSV(){
-//     string path = "cadeteria.csv";
-//     string path2 = "cadetes.csv";
-//     if(File.Exists(path) && File.Exists(path2)){
-//         //Carga de Cadeteria.csv
-//         string[] lineas = File.ReadAllLines(path);
-//         var obtenerCadeteria = from linea in lineas 
-//                                let campos = linea.Split(',') 
-//                                select new Cadeteria(campos[0],campos[1]);
-//         cadeteria = obtenerCadeteria.ToList()[0];
-//         //Carga de cadetes.
-//         string[] lineas2 = File.ReadAllLines(path2);
-//         var obtenerCadetes = from linea in lineas2
-//                              let campos = linea.Split(',')
-//                              select campos;
-//         foreach(var c in obtenerCadetes){
-//             cadeteria.ContratarCadete(int.Parse(c[0]),c[1],c[2],c[3]);
-//         }
-//         return true;
-//     }else{
-//         Console.WriteLine("Los archivos csv no se cargaron correctamente");
-//     }
-//     return false;
-// }
-
 int opcionesFormato=0;
 bool continua=false;
 Console.WriteLine("¿Desea cargar los datos en CSV o JSON? (1:CSV, 2: JSON)");
