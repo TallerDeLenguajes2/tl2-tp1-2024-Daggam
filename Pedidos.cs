@@ -36,11 +36,11 @@ class Pedido
 
     public string VerDatosCliente()
     {
-        return $"Nombre: {cliente.Nombre} | Direccion: {cliente.Direccion} | Telefono: {cliente.Telefono} | Referencia: {cliente.Datos_referencia_direccion}"; 
+        return $"Nombre: {cliente.Nombre} | Direccion: {cliente.Direccion} | Telefono: {cliente.Telefono} | Referencia: {cliente.Datos_referencia_direccion}";
     }
 
-    public void VerDireccionCliente()
+    public string VerDireccionCliente()
     {
-        Console.WriteLine(cliente.Direccion);
+        return cliente.Direccion;
     }
 }
