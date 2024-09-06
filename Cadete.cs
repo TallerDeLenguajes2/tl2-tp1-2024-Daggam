@@ -1,4 +1,6 @@
 namespace CadeteNamespace;
+
+using System.Text.Json.Serialization;
 using PedidoNamespace;
 
 class Cadete
@@ -16,10 +18,14 @@ class Cadete
         this.telefono = telefono;
     }
 
-    public string Nombre { get => nombre; set => nombre = value; }
-    public string Direccion { get => direccion; set => direccion = value; }
-    public string Telefono { get => telefono; set => telefono = value; }
+    [JsonPropertyName("id")]
     public int Id { get => id; set => id = value; }
+    [JsonPropertyName("nombre")]
+    public string Nombre { get => nombre; set => nombre = value; }
+    [JsonPropertyName("direccion")]
+    public string Direccion { get => direccion; set => direccion = value; }
+    [JsonPropertyName("telefono")]
+    public string Telefono { get => telefono; set => telefono = value; }
 
     public float JornalACobrar()
     {

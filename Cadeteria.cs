@@ -1,8 +1,10 @@
 namespace CadeteriaNamespace;
+
+using System.Text.Json.Serialization;
 using CadeteNamespace;
 using PedidoNamespace;
 
-class Cadeteria
+public class Cadeteria
 {
     string nombre;
     string telefono;
@@ -18,6 +20,10 @@ class Cadeteria
 
     internal List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
     internal List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+    [JsonPropertyName("nombre")]
+    public string Nombre { get => nombre; set => nombre = value; }
+    [JsonPropertyName("telefono")]
+    public string Telefono { get => telefono; set => telefono = value; }
 
     public void ContratarCadete(int id, string nombre, string direccion, string telefono)
     {
