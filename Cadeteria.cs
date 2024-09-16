@@ -89,7 +89,7 @@ public class Cadeteria
     public string[] MostrarPedidos(int id)
     {
         var consultarPedidos = from p in listadoPedidos
-                               where p.Cadete.Id == id && p.Estado == EstadoPedido.Enviando
+                               where p.Cadete != null && p.Cadete.Id == id && p.Estado == EstadoPedido.Enviando
                                select $"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()}";
         return consultarPedidos.ToArray();
     }
