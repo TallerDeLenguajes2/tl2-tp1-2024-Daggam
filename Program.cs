@@ -90,11 +90,9 @@ void cambiarPedido(){
     }
     
     //Obtengo los pedidos no entregados del cadete
-    var obtenerPedidos = from pedido in cadeteria.ListadoPedidos
-                         where pedido.Estado == EstadoPedido.Enviando && pedido.Cadete.Id ==id1
-                         select pedido;
+    var obtenerPedidos = cadeteria.MostrarPedidos(id1);
     if(obtenerPedidos.Count() != 0){
-        foreach( var pedido in obtenerPedidos) Console.WriteLine($"Numero pedido: {pedido.Numero_pedido} | {pedido.VerDatosCliente()}");
+        foreach( var pedido in obtenerPedidos) Console.WriteLine(pedido);
         int num_pedido;
         Console.WriteLine("Ingrese el numero del pedido que desea transferir: ");
         while(!(int.TryParse(Console.ReadLine(),out num_pedido))){
@@ -108,7 +106,7 @@ void cambiarPedido(){
         if(cadeteria.AsignarCadeteAPedido(id2,num_pedido)){
             Console.WriteLine("El pedido fue transferido con éxito.");
         }else{
-            Console.WriteLine("El pedido no existe o el cadete a asignar el pedido no existe.");
+            Console.WriteLine("El pedido no existe, el cadete a asignar el pedido no existe"); //El pedido ya no se puede transferir.
         }
     }else{
         Console.WriteLine("El cadete no existe o no tiene asignado ningún pedido");

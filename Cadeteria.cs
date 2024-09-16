@@ -75,4 +75,11 @@ public class Cadeteria
                                select $"Numero pedido: {p.Numero_pedido} | Estado: {p.Estado}";
         return consultarPedidos.ToArray();
     }
+    //Dado el id de un cadete, retornarme los pedidos sin entregar del cadete.
+    public string[] MostrarPedidos(int id){
+        var consultarPedidos = from p in listadoPedidos
+                               where p.Cadete.Id == id && p.Estado == EstadoPedido.Enviando
+                               select $"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()}";
+        return consultarPedidos.ToArray();
+    }
 }
