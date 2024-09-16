@@ -34,11 +34,27 @@ class Pedido
     internal EstadoPedido Estado { get => estado; set => estado = value; }
     internal Cadete Cadete { get => cadete; set => cadete = value; }
 
+
     public string VerDatosCliente()
     {
         return $"Nombre: {cliente.Nombre} | Direccion: {cliente.Direccion} | Telefono: {cliente.Telefono} | Referencia: {cliente.Datos_referencia_direccion}"; 
     }
 
+    public bool CargaCadete(Cadete cadete){
+        if(this.estado != EstadoPedido.Entregado){
+            this.cadete = cadete;
+            this.estado=EstadoPedido.Enviando;
+            return true;
+        }
+        return false;
+    }
+    public bool CambiarEstado(){
+        if(this.estado == EstadoPedido.Enviando){
+            this.estado = EstadoPedido.Entregado;
+            return true;
+        }
+        return false;
+    }
     public void VerDireccionCliente()
     {
         Console.WriteLine(cliente.Direccion);
