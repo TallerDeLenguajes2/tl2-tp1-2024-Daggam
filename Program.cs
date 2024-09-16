@@ -106,7 +106,7 @@ void cambiarPedido(){
         if(cadeteria.AsignarCadeteAPedido(id2,num_pedido)){
             Console.WriteLine("El pedido fue transferido con éxito.");
         }else{
-            Console.WriteLine("El pedido no existe, el cadete a asignar el pedido no existe"); //El pedido ya no se puede transferir.
+            Console.WriteLine("El pedido no existe, el cadete a asignar el pedido no existe"); //o El pedido ya no se puede transferir.
         }
     }else{
         Console.WriteLine("El cadete no existe o no tiene asignado ningún pedido");
@@ -169,17 +169,9 @@ if(continua){
         if (opcion == 5) break;
     }
 
-    Console.WriteLine("--- INFORME PEDIDOS ---");
-    var obtenerID = from cadete in cadeteria.ListadoCadetes
-                    select new {id=cadete.Id,nombre=cadete.Nombre};
-    float plataGanada=0f;
-    foreach (var c in obtenerID)
+    var salida = cadeteria.MostrarInforme();
+    foreach (var s in salida)
     {
-        var cantidadPedidos = cadeteria.ListadoPedidos.Count(p=>p.Estado==EstadoPedido.Entregado && p.Cadete.Id==c.id);
-        float enviosPromedios = (cantidadPedidos !=0) ? ((float) cantidadPedidos/cadeteria.ListadoPedidos.Count(p=>p.Estado!=EstadoPedido.NoAsignado && p.Cadete.Id==c.id)):0;
-        float montoGanado = cadeteria.JornalACobrar(c.id);
-        Console.WriteLine($"Nombre: {c.nombre} | Monto ganado: {montoGanado} | Envios realizados: {cantidadPedidos} | Envios promedios: {enviosPromedios}");
-        plataGanada+=montoGanado;
+        Console.WriteLine(s);
     }
-    Console.WriteLine($"Monto total ganado: {plataGanada}");
 }
