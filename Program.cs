@@ -21,7 +21,7 @@ void crearPedido()
 }
 
 void asignarPedidos(){
-    var pedidosNoAsignados = cadeteria.MostrarPedidos();
+    var pedidosNoAsignados = cadeteria.MostrarPedidosNA();
     if(pedidosNoAsignados.Count() != 0){
         Console.WriteLine("-- PEDIDOS NO ASIGNADOS --");
         foreach(var p in pedidosNoAsignados){
@@ -58,31 +58,21 @@ void asignarPedidos(){
 }
 
 void cambiarEstadoPedido(){
-    if(cadeteria.ListadoPedidos.Count != 0){
+    var pedidos = cadeteria.MostrarPedidosEstado();
+    if(pedidos.Count() != 0){
         Console.WriteLine("-- Pedidos Asignados --");
-        foreach(var p in cadeteria.ListadoPedidos){
-            Console.WriteLine($"Numero pedido: {p.Numero_pedido} | Estado: {p.Estado}"); 
+        foreach(var p in pedidos){
+            Console.WriteLine(p); 
         }
         Console.WriteLine("Ingrese el numero del pedido al cuál desea cambiar de estado");
         int num_ped;
         while(!(int.TryParse(Console.ReadLine(),out num_ped))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        Pedido pedidoSeleccionado = cadeteria.ListadoPedidos.Find(p=>p.Numero_pedido==num_ped);
-        if(pedidoSeleccionado!=null){
-            Console.WriteLine("Ingrese el estado al cual desea cambiar:");
-            foreach(var estado in Enum.GetValues(typeof(EstadoPedido))){
-                    if(estado.Equals(EstadoPedido.NoAsignado)) continue;
-                    Console.WriteLine($"- {estado}");
-            }
-            EstadoPedido nuevoEstado;
-            while(!Enum.TryParse(Console.ReadLine(),true,out nuevoEstado) || nuevoEstado==EstadoPedido.NoAsignado){
-                Console.WriteLine("El valor ingresado no es válido.");
-            }
-            pedidoSeleccionado.Estado=nuevoEstado;
+        if(cadeteria.CambiarEstadoPedido(num_ped)){
             Console.WriteLine("El cambio de estado se realizo exitosamente.");
         }else{
-            Console.WriteLine("No existe un pedido con tal numero.");
+            Console.WriteLine("El pedido no existe o no puede cambiarse el estado de dicho pedido.");
         }
     }else{
         Console.WriteLine("No hay pedidos asignados.");

@@ -55,11 +55,24 @@ public class Cadeteria
         }
         return 0f;
     }
+    public bool CambiarEstadoPedido(int num){
+        Pedido p = listadoPedidos.FirstOrDefault(p=>p.Numero_pedido==num);
+        if(p!=null){
+            return p.CambiarEstado();
+        }
+        return false;
+    }
     //Muestra aquellos pedidos no asignados.
-    public string[] MostrarPedidos(){
+    //También lo que podría hacer es que solamente los pedidos sirvan como un getter y solo sea modificable mediante esta clase.
+    public string[] MostrarPedidosNA(){
         var consultaPedidos = from p in listadoPedidos
                               where p.Estado == EstadoPedido.NoAsignado
                               select $"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()} ";
         return consultaPedidos.ToArray();
+    }
+    public string[] MostrarPedidosEstado(){
+        var consultarPedidos = from p in listadoPedidos
+                               select $"Numero pedido: {p.Numero_pedido} | Estado: {p.Estado}";
+        return consultarPedidos.ToArray();
     }
 }
