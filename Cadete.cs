@@ -1,7 +1,7 @@
 namespace CadeteNamespace;
 
 using System.Text.Json.Serialization;
-using PedidoNamespace;
+
 
 class Cadete
 {
@@ -26,10 +26,4 @@ class Cadete
     public string Direccion { get => direccion; set => direccion = value; }
     [JsonPropertyName("telefono")]
     public string Telefono { get => telefono; set => telefono = value; }
-
-    public float JornalACobrar()
-    {
-        return 500f;
-    }
-
 }
