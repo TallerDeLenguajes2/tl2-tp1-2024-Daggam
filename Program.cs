@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using AccesoNameSpace;
+using CadeteNamespace;
 using CadeteriaNamespace;
 using PedidoNamespace;
 
@@ -116,22 +117,31 @@ void cambiarPedido(){
 
 
 int opcionesFormato=0;
-bool continua=false;
+bool continua=true;
 Console.WriteLine("¿Desea cargar los datos en CSV o JSON? (1:CSV, 2: JSON)");
 while(!(int.TryParse(Console.ReadLine(),out opcionesFormato)) || (opcionesFormato<1 || opcionesFormato>2)){
     Console.WriteLine("El valor ingresado no es válido");
 }
-if(opcionesFormato==1){
-    AccesoCSV csv = new AccesoCSV();
-    cadeteria = csv.cargarCadeteria("cadeteria.csv");
-    continua = csv.cargarCadetes("cadetes.csv",cadeteria);
-}else if(opcionesFormato==2){
-    AccesoJSON json = new AccesoJSON();
-    cadeteria = json.cargarCadeteria("cadeteria.json");
-    continua = json.cargarCadetes("cadetes.json",cadeteria);
-}
+{
+    List<Cadete> cadetes=null;
+    if(opcionesFormato==1){
+        AccesoCSV csv = new AccesoCSV();
+        cadeteria = csv.cargarCadeteria("cadeteria.csv");
+        cadetes = csv.cargarCadetes("cadetes.csv");
+    }else if(opcionesFormato==2){
+        AccesoJSON json = new AccesoJSON();
+        cadeteria = json.cargarCadeteria("cadeteria.json");
+        cadetes = json.cargarCadetes("cadetes.json");
+    }
+    if(cadeteria!=null && cadetes!=null){
+        foreach(var c in cadetes){
+            cadeteria.ContratarCadete(c.Id,c.Nombre,c.Direccion,c.Telefono);
+        }
+    }else{
+        continua=false;
+    }
 
-continua &= cadeteria!=null;
+}
 
 if(continua){
     while (true)

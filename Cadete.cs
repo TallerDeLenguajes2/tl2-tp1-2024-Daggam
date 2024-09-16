@@ -3,7 +3,7 @@ namespace CadeteNamespace;
 using System.Text.Json.Serialization;
 
 
-class Cadete
+public class Cadete
 {
     int id;
     string nombre;

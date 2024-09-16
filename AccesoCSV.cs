@@ -1,10 +1,11 @@
+using CadeteNamespace;
 using CadeteriaNamespace;
 
 namespace AccesoNameSpace;
 
 public class AccesoCSV : AccesoADatos
 {
-    public override Cadeteria cargarCadeteria(string path)
+    public override Cadeteria? cargarCadeteria(string path)
     {
         string[] campos = cargarCSV(path).FirstOrDefault();
         if(campos!=null && campos.Count() == 2){
@@ -14,23 +15,24 @@ public class AccesoCSV : AccesoADatos
         return null;
     }
 
-    public override bool cargarCadetes(string path, Cadeteria cadeteria)
+    public override List<Cadete>? cargarCadetes(string path)
     {
         var campos = cargarCSV(path);
-        if(campos.Count != 0 && cadeteria!=null){
+        List<Cadete> cadetes = new List<Cadete>();
+        if(campos.Count != 0){
             try{
                 foreach (var c in campos)
                 {
-                    cadeteria.ContratarCadete(int.Parse(c[0]),c[1],c[2],c[3]);
+                    cadetes.Add(new Cadete(int.Parse(c[0]),c[1],c[2],c[3]));
                 }
-                return true;
+                return cadetes;
             }catch{
-                Console.WriteLine("Ocurrio un error en el formato de carga de los cadetes.");
+                return null;
             }
         }else{
-            Console.WriteLine("Los cadetes no fueron cargados correctamente");
+            return null;
         }
-        return false;
+
     }
 
     private List<string[]> cargarCSV(string path){
