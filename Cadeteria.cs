@@ -39,9 +39,7 @@ public class Cadeteria
         Pedido p = listadoPedidos.Find(ped=>ped.Numero_pedido==num_ped);
         Cadete c = listadoCadetes.Find(c=>c.Id == id);
         if(p!=null && c!=null){
-            p.Cadete = c;
-            p.Estado = EstadoPedido.Enviando;
-            return true;
+            return p.CargaCadete(c);
         }
         return false;
     }
@@ -56,5 +54,12 @@ public class Cadeteria
             return montoPedido*listadoPedidos.Count(p=>p.Cadete==cadeteElegido && p.Estado==EstadoPedido.Entregado);
         }
         return 0f;
+    }
+    //Muestra aquellos pedidos no asignados.
+    public string[] MostrarPedidos(){
+        var consultaPedidos = from p in listadoPedidos
+                              where p.Estado == EstadoPedido.NoAsignado
+                              select $"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()} ";
+        return consultaPedidos.ToArray();
     }
 }

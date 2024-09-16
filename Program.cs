@@ -21,40 +21,38 @@ void crearPedido()
 }
 
 void asignarPedidos(){
-    var pedidosNoAsignados = (from pedidos in cadeteria.ListadoPedidos
-                             where pedidos.Estado == EstadoPedido.NoAsignado
-                             select pedidos).ToList();
-    if(pedidosNoAsignados.Count != 0){
+    var pedidosNoAsignados = cadeteria.MostrarPedidos();
+    if(pedidosNoAsignados.Count() != 0){
         Console.WriteLine("-- PEDIDOS NO ASIGNADOS --");
-        foreach(Pedido p in pedidosNoAsignados){
-            Console.WriteLine($"Numero pedido: {p.Numero_pedido} | {p.VerDatosCliente()} ");
+        foreach(var p in pedidosNoAsignados){
+            Console.WriteLine(p);
         }
         Console.WriteLine("Ingrese el numero de pedido a asignar:");
         int numped=-1;
         while(!(int.TryParse(Console.ReadLine(),out numped))){
             Console.WriteLine("El valor ingresado no es válido.");
         }
-        if(pedidosNoAsignados.Exists(p=>p.Numero_pedido==numped)){
-            var consultaNombre = cadeteria.MostrarCadetes();
-            foreach(string info in consultaNombre){
-                    Console.WriteLine(info);
-            }   
-            Console.WriteLine("Ingrese el id del cadete al cual desea asignar este pedido:");
-            int id=-1;
-            while(!(int.TryParse(Console.ReadLine(),out id))){
-                Console.WriteLine("El valor ingresado no es válido.");
-            }
-            if(cadeteria.AsignarCadeteAPedido(id,numped)){
-                Console.WriteLine("Pedido asignado con éxito.");
-            }else{
-                Console.WriteLine("El cadete no existe.");
-            }
+        // if(pedidosNoAsignados.Exists(p=>p.Numero_pedido==numped)){
+        var consultaNombre = cadeteria.MostrarCadetes();
+        foreach(string info in consultaNombre){
+                Console.WriteLine(info);
+        }   
+        Console.WriteLine("Ingrese el id del cadete al cual desea asignar este pedido:");
+        int id=-1;
+        while(!(int.TryParse(Console.ReadLine(),out id))){
+            Console.WriteLine("El valor ingresado no es válido.");
+        }
+        if(cadeteria.AsignarCadeteAPedido(id,numped)){
+            Console.WriteLine("Pedido asignado con éxito.");
         }else{
-            Console.WriteLine("El pedido no existe.");
+            Console.WriteLine("El pedido no se puede asignar.");
         }
     }else{
         Console.WriteLine("No hay pedidos para asignar");
     }
+    // }else{
+        // Console.WriteLine("El pedido no existe.");
+    // }
     
     Thread.Sleep(1500);
 }
